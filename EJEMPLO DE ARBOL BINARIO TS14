@@ -1,0 +1,120 @@
+using System;
+
+namespace ArbolBinario
+{
+    public class Estudiante
+    {
+        public string Nombre { get; set; }
+        public string Apellido { get; set; }
+        public int Edad { get; set; }
+        public double Promedio { get; set; }
+
+        public Estudiante(string nombre, string apellido, int edad, double promedio)
+        {
+            Nombre = nombre;
+            Apellido = apellido;
+            Edad = edad;
+            Promedio = promedio;
+        }
+    }
+
+    public class Nodo
+    {
+        public Estudiante Valor { get; set; }
+        public Nodo Izquierdo { get; set; }
+        public Nodo Derecho { get; set; }
+
+        public Nodo(Estudiante valor)
+        {
+            Valor = valor;
+            Izquierdo = null;
+            Derecho = null;
+        }
+    }
+
+    public class ArbolBinario
+    {
+        public Nodo Raiz { get; set; }
+
+        public ArbolBinario()
+        {
+            Raiz = null;
+        }
+
+        // Insertar estudiantes en el árbol ordenados por promedio
+        public void Insertar(Estudiante estudiante)
+        {
+            Raiz = InsertarRec(Raiz, estudiante);
+        }
+
+        private Nodo InsertarRec(Nodo nodo, Estudiante estudiante)
+        {
+            if (nodo == null)
+            {
+                return new Nodo(estudiante);
+            }
+
+            if (estudiante.Promedio < nodo.Valor.Promedio)
+            {
+                nodo.Izquierdo = InsertarRec(nodo.Izquierdo, estudiante);
+            }
+            else
+            {
+                nodo.Derecho = InsertarRec(nodo.Derecho, estudiante);
+            }
+
+            return nodo;
+        }
+
+        // Recorridos del árbol
+        public void MostrarInOrden()
+        {
+            MostrarInOrdenRec(Raiz);
+        }
+
+        private void MostrarInOrdenRec(Nodo nodo)
+        {
+            if (nodo != null)
+            {
+                MostrarInOrdenRec(nodo.Izquierdo);
+                Console.WriteLine($"{nodo.Valor.Nombre} {nodo.Valor.Apellido} - Promedio: {nodo.Valor.Promedio}");
+                MostrarInOrdenRec(nodo.Derecho);
+            }
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            ArbolBinario arbol = new ArbolBinario();
+
+            // Datos proporcionados del archivo PDF
+            Estudiante[] estudiantes = new Estudiante[]
+            {
+                new Estudiante("Susana", "Alarcón", 20, 45.04),
+                new Estudiante("Edgar", "Aldaz", 21, 38.36),
+                new Estudiante("Jorge", "Basantes", 22, 49.34),
+                new Estudiante("Antony", "Chingo", 19, 27.16),
+                new Estudiante("Sheyla", "Correa", 23, 44.10),
+                new Estudiante("Jorge", "Dominguez", 24, 44.26),
+                new Estudiante("Jorge", "Gómez", 25, 43.45),
+                new Estudiante("Danilo", "Lugmaña", 26, 38.53),
+                new Estudiante("Wilmer", "Villegas Toapanta", 28, 43.53),
+                new Estudiante("Johnatan", "Malusin", 27, 46.77)
+            };
+
+            // Insertar los estudiantes en el árbol
+            foreach (var estudiante in estudiantes)
+            {
+                arbol.Insertar(estudiante);
+            }
+
+            // Mostrar el árbol en orden
+            Console.WriteLine("Recorrido In-Orden (Estudiantes ordenados por promedio):");
+            arbol.MostrarInOrden();
+
+            // Menú de operaciones adicionales si es necesario
+        }
+    }
+}
